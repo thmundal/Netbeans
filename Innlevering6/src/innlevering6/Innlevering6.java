@@ -15,7 +15,7 @@ public class Innlevering6 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        // Oppgave 4
         account = new Konto();
         account.setName("Thomas Mundal");
         account.setBalance(100);
@@ -23,6 +23,7 @@ public class Innlevering6 {
         
         System.out.println("---------------------------");
         
+        // Oppgave 5
         Konto acc2 = new Konto();
         acc2.setName("Emil");
         acc2.setBalance(-50000);

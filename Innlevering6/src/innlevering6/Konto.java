@@ -10,17 +10,21 @@ package innlevering6;
  * @author Thomas
  */
 public class Konto {
+    // Oppgave 1, lager egenskaper
     private int balance;
     private String owner;
     
+    // Oppgave 2
     public void setBalance(int b) {
         balance = b;
     }
     
+    // Oppgave 2
     public void setName(String n) {
         owner = n;
     }
     
+    // Oppgave 3
     public void writeInfo() {
         System.out.println("Account owner: " + owner);
         System.out.println("Account balance: " + balance);
