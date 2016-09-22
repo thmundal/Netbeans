@@ -4,122 +4,50 @@
  * and open the template in the editor.
  */
 package canvastest;
-
-import javax.swing.SwingUtilities;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseMotionAdapter;
-
 /**
  *
- * @author thmun
+ * @author Thomas Mundal<thomas@munso.no>
  */
 public class CanvasTest {
-
     /**
      * @param args the command line arguments
      */
+    
+    public static Vector2 pos = new Vector2(1f, 1f);
+    public static Vector2 speed = new Vector2(0f, 0f);
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
-    }
-    
-    private static void createAndShowGUI() {
-        System.out.println("Created GUI on EDT?" + SwingUtilities.isEventDispatchThread());
-        JFrame f = new JFrame("Swing Paint Demo");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setSize(250,250);
-        f.add(new MyPanel());
-        f.pack();
-        f.setVisible(true);
-    }
-}
-
-class MyPanel extends JPanel {
-    private int squareX = 50;
-    private int squareY = 50;
-    private int squareW = 20;
-    private int squareH = 20;
-    
-    public MyPanel() {
-        setBorder(BorderFactory.createLineBorder(Color.black));
+        final Game game = new Game();
         
-        addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                moveSquare(e.getX(), e.getY());
+        game.Update(new UpdateCallback() {
+            public void run(float deltaTime) {
+                //System.out.println("Test");
+                if(game.isKeyDown("a")) {
+                    speed.x = -1;
+                }
+                
+                if(game.isKeyDown("d")) {
+                    speed.x = 1;
+                }
+                
+                if(game.isKeyDown("w")) {
+                    speed.y = -1;
+                }
+                
+                if(game.isKeyDown("s")) {
+                    speed.y = 1;
+                }
+                
+                pos = pos.add(speed);
             }
         });
         
-        addMouseMotionListener(new MouseAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                moveSquare(e.getX(), e.getY());
+        game.Draw(new DrawCallback() {
+            public void run(Graphics g, float deltaTime) {
+                g.drawOval(pos.intX(), pos.intY(), 60, 60); //FOR CIRCLE
             }
         });
-    }
-    
-    private void moveSquare(int x, int y) {
-        int OFFSET = 1;
-        if((squareX!=x) || (squareY!=y)) {
-            repaint(squareX,squareY,squareW+OFFSET,squareH+OFFSET);
-            squareX=x;
-            squareY=y;
-            repaint(squareX,squareY,squareW+OFFSET,squareH+OFFSET);
-        }
-    }
-    
-    public Dimension getPreferredSize() {
-        return new Dimension(250,250);
-    }
-    
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
         
-        // Draw text:
-        g.drawString("This is a custom panel", 10, 20);
-        
-        g.setColor(Color.RED);
-        g.fillRect(squareX,squareY,squareW,squareH);
-        g.setColor(Color.BLACK);
-        g.drawRect(squareX,squareY,squareW,squareH);
-    }
-}
-
-
-class KeyboardInput implements KeyListener {
-    public void keyTyped(KeyEvent e) {
-        
-    }
-    
-    public void keyPressed(KeyEvent e) {
-        
-    }
-    
-    public void keyReleased(KeyEvent e) {
-        
-    }
-    
-    private void displayInfo(KeyEvent e, String status) {
-        int id = e.getID();
-        
-        if(id == KeyEvent.KEY_TYPED) {
-            char c = e.getKeyChar();
-        } else {
-            int KeyCode = e.getKeyCode();
-        }
-        
-        int modifiers = e.getModifiersEx();
+        game.run();
     }
 }

@@ -148,5 +148,4 @@ public class Innlevering2 {
         }
         return k;
     }
-
 }
