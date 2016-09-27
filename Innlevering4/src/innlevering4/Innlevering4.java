@@ -32,7 +32,7 @@ public class Innlevering4 {
         
         // Oppgave 4
         System.out.println("Oppgave 4");
-        HelloWorld();
+        System.out.println(HelloWorld());
         System.out.println();
         
         // Oppgave 6
@@ -45,6 +45,12 @@ public class Innlevering4 {
 
         printArray(sortedArray);            // Print sorted array
         printArray(array);                  // Print the original array
+        
+        int[] copiedArray = copyArray(array);   // Make a copy of an array
+        printArray(copiedArray);                // Print the copy
+        
+        copiedArray[0] = 123456;                // Change a value
+        printArray(array);                      // Check that the original array is left alone
     }
 
     public static void Task4_1() {
@@ -109,7 +115,7 @@ public class Innlevering4 {
      * @return The generated array
      */
     public static int[] createArray(int n) {
-        int[] array = new int[n];                   // Initialize array with n size
+        int[] array = new int[n];                       // Initialize array with n size
 
         for (int i = 0; i < n; i++) {                    // Fill the array with random numbers
             array[i] = (int) Math.floor(Math.random() * 100) + 1;
@@ -119,12 +125,26 @@ public class Innlevering4 {
     }
 
     /**
-     * Prints the contents of an array to the console
-     *
+     * Prints the contents of a one-dimensional array to the console
+     * 
      * @param array The array to print
      */
     public static void printArray(int[] array) {
         System.out.println(java.util.Arrays.toString(array));
+    }
+    
+    /**
+     * Returns a copy of an array
+     * @param array
+     * @return 
+     */
+    public static int[] copyArray(int[] array) {
+        int[] out = new int[array.length];
+        
+        for(int i=0; i<array.length; i++) {
+            out[i] = array[i];
+        }
+        return out;
     }
 
     /**
@@ -203,8 +223,8 @@ public class Innlevering4 {
         return true;
     }
     
-    public static void HelloWorld() {
-        System.out.println("Hello World");
+    public static String HelloWorld() {
+        return "Hello World";
     }
     
     /**
