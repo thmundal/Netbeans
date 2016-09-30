@@ -12,6 +12,8 @@ package innlevering5;
 public class CoinStats {
     private Coin coin;
     private String history;
+    private int num_heads;
+    private int num_tails;
     
     public CoinStats() {
         history = "";
@@ -19,8 +21,9 @@ public class CoinStats {
     }
     
     public boolean flipCoin() {
-        addResult(coin.flip());
-        return true;
+        boolean r = coin.flip();
+        addResult(r);
+        return r;
     }
     
     public boolean getFace() {
@@ -29,10 +32,13 @@ public class CoinStats {
     
     private void addResult(boolean result) {
         String facename = "";
-        if(result)
+        if(result) {
             facename = "H";
-        else
+            num_heads++;
+        } else {
             facename = "T";
+            num_tails++;
+        }
         history += facename;
     }
     
