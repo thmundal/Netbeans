@@ -14,6 +14,7 @@ import java.awt.*;
  */
 public class Drawer extends JFrame {
     private Callback drawCallback;
+    public Game game;
     
     public Drawer(String title) {
         setSize(500, 500);
@@ -29,10 +30,10 @@ public class Drawer extends JFrame {
     
     public void paint(Graphics g) {
         if(drawCallback != null) {
-            drawCallback.run(g);
+            drawCallback.run(g, game.deltaTime); // 0 -> deltaTime
         } else {
             System.out.println("No drawcallback defined");
         }
-        //g.drawOval(40, 40, 60, 60); //FOR CIRCLE
+        repaint();
     }
 }

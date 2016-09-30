@@ -21,11 +21,13 @@ public class Game {
     private Callback updateCallback;
     private Callback drawCallback;
     private long last_delta = System.nanoTime();
+    public float deltaTime;
     
     private InputListener input;
     public Game() {
         state = true;
         frame = new Drawer("Testing key input");
+        frame.game = this;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         JPanel panel = new JPanel();
@@ -81,14 +83,15 @@ public class Game {
     public void run() {
         while(running()) {
             long time = System.nanoTime();
-            int delta_time = (int) ((time - last_delta) / 1000000);
+            deltaTime = (int) ((time - last_delta) / 1000000);
             last_delta = time;
             
             if(updateCallback != null) {
-                updateCallback.run(this, delta_time);
+                updateCallback.run(this, deltaTime);
+            } else {
+                System.out.println("No update callback defined");
+                state = false;
             }
-            
-           frame.repaint();
         }
     }
 }

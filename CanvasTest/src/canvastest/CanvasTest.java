@@ -20,22 +20,21 @@ public class CanvasTest {
         final Game game = new Game();
         
         game.Update(new UpdateCallback() {
-            public void run(float deltaTime) {
-                //System.out.println("Test");
+            public void run(Game g, float deltaTime) {
                 if(game.isKeyDown("a")) {
-                    speed.x = -1;
+                    speed.x = -1 * deltaTime;
                 }
                 
                 if(game.isKeyDown("d")) {
-                    speed.x = 1;
+                    speed.x = 1 * deltaTime;
                 }
                 
                 if(game.isKeyDown("w")) {
-                    speed.y = -1;
+                    speed.y = -1 * deltaTime;
                 }
                 
                 if(game.isKeyDown("s")) {
-                    speed.y = 1;
+                    speed.y = 1 * deltaTime;
                 }
                 
                 pos = pos.add(speed);
@@ -44,6 +43,7 @@ public class CanvasTest {
         
         game.Draw(new DrawCallback() {
             public void run(Graphics g, float deltaTime) {
+                g.clearRect(0, 0, 500, 500);
                 g.drawOval(pos.intX(), pos.intY(), 60, 60); //FOR CIRCLE
             }
         });
