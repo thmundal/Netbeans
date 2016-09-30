@@ -74,14 +74,6 @@ public class Innlevering5 {
         gui.add(seq_result);
         gui.add(history);
         
-        //gui.pack();
-        /*
-        for(int i=0; i<50; i++) {
-            c.flipCoin();
-        }
-        
-        System.out.println(c.getHistory());
-        System.out.println("Checking for HHTH");
-        System.out.println(c.checkSequence("HHTH"));*/
+        gui.setVisible(true);
     }
 }

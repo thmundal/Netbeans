@@ -6,6 +6,9 @@
 package innlevering5;
 
 import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 /**
@@ -23,8 +26,7 @@ public class CoinGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //setPreferredSize(new java.awt.Dimension(500, 500));
         setSize(500,500);
-        setVisible(true);
         setFocusable(true);
-        setLayout(new FlowLayout());
+        setLayout(new GridLayout(0,1));
     }
 }

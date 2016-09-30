@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,15 +22,22 @@ public class Game {
     private Drawer frame;
     private Callback updateCallback;
     private Callback drawCallback;
-    private long last_delta = System.nanoTime();
+    private long last_time = System.nanoTime();
     public float deltaTime;
+    float frameRate;
+    double timePerFrame;
     
     private InputListener input;
     public Game() {
+        frameRate = 60;
+        timePerFrame = 1f / frameRate;
+        
         state = true;
+        JFrame window = new JFrame("Test");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         frame = new Drawer("Testing key input");
         frame.game = this;
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         JPanel panel = new JPanel();
         input = new InputListener();
@@ -41,9 +50,10 @@ public class Game {
         panel.addMouseMotionListener(input);
         
         frame.add(panel);
+        window.add(frame);
         
-        frame.setSize(500,500);
-        frame.setVisible(true);
+        window.setSize(500,500);
+        window.setVisible(true);
         
         panel.setFocusable(true);
         panel.requestFocusInWindow();
@@ -83,14 +93,34 @@ public class Game {
     public void run() {
         while(running()) {
             long time = System.nanoTime();
-            deltaTime = (int) ((time - last_delta) / 1000000);
-            last_delta = time;
+            
+            deltaTime = ((time - last_time) / 1000000000f);
+            
+            // System.out.println((float) (time - last_delta) / 1000000000f);
+            
+            // System.out.println(deltaTime);
+            last_time = time;
             
             if(updateCallback != null) {
                 updateCallback.run(this, deltaTime);
             } else {
                 System.out.println("No update callback defined");
                 state = false;
+            }
+            
+            frame.repaint();
+            
+            // Throttle frame time based on FPS
+            double remainingFrameTime = (last_time - System.nanoTime()) / 1000000000 + timePerFrame;
+            // System.out.println(remainingFrameTime);
+            if(remainingFrameTime > 0) {
+                long millis = (long) (remainingFrameTime * 1000);
+                int nanos = (int) (remainingFrameTime * 1000 - millis) * 1000000;
+                // System.out.println(millis + "\t" + nanos);
+                try {
+                    Thread.sleep(millis, nanos);
+                } catch (InterruptedException ex) {
+                }
             }
         }
     }

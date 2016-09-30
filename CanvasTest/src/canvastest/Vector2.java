@@ -29,4 +29,8 @@ public class Vector2 {
     public int intY() {
         return (int) y;
     }
+    
+    public Vector2 scale(float n) {
+        return new Vector2(this.x * n, this.y * n);
+    }
 }

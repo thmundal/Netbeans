@@ -12,14 +12,14 @@ import java.awt.*;
  *
  * @author Thomas
  */
-public class Drawer extends JFrame {
+public class Drawer extends JPanel {
     private Callback drawCallback;
     public Game game;
     
     public Drawer(String title) {
         setSize(500, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setLocationRelativeTo(null);
         setVisible(true);
     }
     
@@ -28,12 +28,12 @@ public class Drawer extends JFrame {
         drawCallback = c;
     }
     
-    public void paint(Graphics g) {
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         if(drawCallback != null) {
             drawCallback.run(g, game.deltaTime); // 0 -> deltaTime
         } else {
             System.out.println("No drawcallback defined");
         }
-        repaint();
     }
 }

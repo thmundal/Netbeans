@@ -5,6 +5,9 @@
  */
 package canvastest;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 /**
  *
  * @author Thomas Mundal<thomas@munso.no>
@@ -16,28 +19,36 @@ public class CanvasTest {
     
     public static Vector2 pos = new Vector2(1f, 1f);
     public static Vector2 speed = new Vector2(0f, 0f);
+    public static Sprite dude;
+    
     public static void main(String[] args) {
         final Game game = new Game();
+        final float moveSpeed = 500.0f;
+        
+        final Vector2 gravity = new Vector2(0, 100);
         
         game.Update(new UpdateCallback() {
             public void run(Game g, float deltaTime) {
                 if(game.isKeyDown("a")) {
-                    speed.x = -1 * deltaTime;
+                    speed.x = -moveSpeed;
                 }
                 
                 if(game.isKeyDown("d")) {
-                    speed.x = 1 * deltaTime;
+                    speed.x = moveSpeed;
                 }
                 
                 if(game.isKeyDown("w")) {
-                    speed.y = -1 * deltaTime;
+                    speed.y = -moveSpeed;
                 }
                 
                 if(game.isKeyDown("s")) {
-                    speed.y = 1 * deltaTime;
+                    speed.y = moveSpeed;
                 }
                 
-                pos = pos.add(speed);
+                speed = speed.scale(deltaTime);
+                pos = pos.add(speed); //.add(gravity.scale(deltaTime));
+                
+                
             }
         });
         

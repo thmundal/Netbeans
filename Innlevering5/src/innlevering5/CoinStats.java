@@ -52,13 +52,15 @@ public class CoinStats {
         int hits = 0;
         int pos = 0;
         
-        while(h.indexOf(seq) > -1) {
-            hits++;
-            h = h.substring(h.indexOf(seq) + seq.length(), h.length());
-            
-            // Safeguard, do not check over 1k times....... Should not happen
-            if(hits > 1000)
-                break;
+        if(seq.length() > 0) {
+            while(h.indexOf(seq) > -1) {
+                hits++;
+                h = h.substring(h.indexOf(seq) + seq.length(), h.length());
+
+                // Safeguard, do not check over 1k times....... Should not happen
+                if(hits > 1000)
+                    break;
+            }
         }
         return hits;
     }
