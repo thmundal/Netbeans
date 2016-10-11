@@ -12,16 +12,23 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 /**
- *
- * @author 888651
+ * Extension of JFrame constructing a GUI for the coin application
+ * @author Thomas Mundal
  */
 public class CoinGUI extends JFrame {
+    /**
+     * Initializes the frame and calls the setup function
+     * @param title The title of the window
+     */
     public CoinGUI(String title) {
         super(title);
         
         setup();
     }
     
+    /**
+     * Sets up the GUI window
+     */
     private void setup() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //setPreferredSize(new java.awt.Dimension(500, 500));
