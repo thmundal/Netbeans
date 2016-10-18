@@ -76,4 +76,8 @@ public class Konto {
             System.out.println("Please provide a positive integer");
         }
     }
+    
+    public String getOwner() {
+        return owner;
+    }
 }
