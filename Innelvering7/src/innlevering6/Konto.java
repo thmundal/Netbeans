@@ -68,7 +68,7 @@ public class Konto {
      */
     public void withdrawMoney(int amount) {
         if(amount > 0) {
-            if(amount <= balance)
+            if(hasMoney(amount))
                 balance -= amount;
             else
                 System.out.println("You do not have sufficient funds");
@@ -77,6 +77,19 @@ public class Konto {
         }
     }
     
+    /**
+     * Check if the account has a given amount of money available
+     * @param n The amount to check.
+     * @return Returns true if balance covers the amount, false if otherwise
+     */
+    public boolean hasMoney(int n) {
+        return (n <= balance);
+    }
+    
+    /**
+     * Return the name of this account's owner
+     * @return 
+     */
     public String getOwner() {
         return owner;
     }

@@ -29,7 +29,7 @@ public class Innlevering7 {
             accounts[i].setBalance((int) Math.floor(Math.random() * 10000 + 1));
         }
         
-        in = new Scanner(System.in);
+        /*in = new Scanner(System.in);
         int menunum = 1;
         
         do{
@@ -39,27 +39,10 @@ public class Innlevering7 {
                 System.out.println("Please provide a number");
             }
             
-        } while(menunum > 0);
-    }
-    
-    public static void printAccounts() {
-        for(int i=0; i<accounts.length; i++) {
-            //accounts[i].writeInfo();
-            //System.out.println("---------------------------------");
-            System.out.println(i + ": "+accounts[i].getOwner());
-        }
+        } while(menunum > 0);*/
         
-    }
-    
-    public static void accountInfo() {
-        System.out.println("Velg din konto");
-        printAccounts();
-
-        Konto acc = accounts[in.nextInt()];
-        acc.writeInfo();
-    }
-    
-    public static void displayMenu() {
-            
+        minibank bank = new minibank(accounts);
+        BankGUI gui = new BankGUI();
+        
     }
 }
