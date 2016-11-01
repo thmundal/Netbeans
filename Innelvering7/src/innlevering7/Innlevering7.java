@@ -20,29 +20,18 @@ public class Innlevering7 {
     private static Konto[] accounts;
     private static Scanner in;
     public static void main(String[] args) {
+        // Create some arbitrary accounts
         String[] names = {"Thomas", "Emil", "Sondre", "Steffen", "jan Olav", "Martin", "Marte", "Tone Marie", "Knut", "Nils"};
         
         accounts = new Konto[10];
+        // Fill the accounts with names and a random deposited value
         for(int i=0; i<accounts.length; i++) {
             accounts[i] = new Konto();
             accounts[i].setName(names[i]);
             accounts[i].setBalance((int) Math.floor(Math.random() * 10000 + 1));
         }
         
-        /*in = new Scanner(System.in);
-        int menunum = 1;
-        
-        do{
-            try {
-                
-            } catch(Exception e) {
-                System.out.println("Please provide a number");
-            }
-            
-        } while(menunum > 0);*/
-        
+        // Initialize the bank here
         minibank bank = new minibank(accounts);
-        BankGUI gui = new BankGUI();
-        
     }
 }

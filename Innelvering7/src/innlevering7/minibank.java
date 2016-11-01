@@ -7,6 +7,8 @@ package innlevering7;
 
 import java.util.Scanner;
 import innlevering6.Konto;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 /**
  *
@@ -15,69 +17,156 @@ import javax.swing.JPanel;
 public class minibank {
     private Konto[] account_list;
     private Scanner in;
-    private int account_number;
     private Konto active_account;
-    private boolean running = false;
+    BankGUI gui;
+    boolean logged_in;
+    ActionListener default_button_listener;
+    ActionListener new_account_button_listener;
+    ActionListener withdraw_button_listener;
+    ActionListener deposit_button_listener;
     
+    /**
+     * Sets up the minibank with a given array of accounts. Also creates the different modes for the button in the GUI
+     * @param acc_list 
+     */
     public minibank(Konto[] acc_list) {
         account_list = acc_list;
         in = new Scanner(System.in);
+        gui = new BankGUI();
         
-        boolean valid = false;
+        welcome();
         
-        System.out.println("Velkommen til 1337 Bank");
-        System.out.println("Vennligst skriv inn ditt kontonummer");
-        
-        while(!valid) {
-            try {
-                account_number = in.nextInt();
-
-                if(account_number - 1 > account_list.length) {
-                    throw new Exception("Kontonummer finnes ikke, vennligst prøv igjen");
-                } else {
-                    valid = true;
-                }
-            } catch(Exception e) {
-                System.out.println("En feil skjedde, vennligst prøv på nytt");
-                in.next();
-                System.out.println("");
-            }
-        }
-        
-        running = true;
-        //displayMenu(account_list[account_number]);
-    }
-    
-    private void displayMenu(Konto ac, JPanel output) {
-            active_account = ac;
-            
-            //output.
-            
-            /*while(running) {
-                System.out.println("Velkommen " + active_account.getOwner());
-                System.out.println("Velg funksjon");
-                System.out.println("1. Se saldo");
-                System.out.println("2. Ta ut penger");
-                System.out.println("3. Sett inn penger");
-                System.out.println("4. Legg til konto");
-                System.out.println("5. Avslutt");
-
+        default_button_listener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
                 try {
-                    int n = in.nextInt();
-                    doAction(n);
-                } catch(Exception e) {
-                    System.out.println("En feil skjedde, prøv igjen " +e.getMessage());
-                    in.next();
-                    System.out.println("");
+                    String input = gui.getInput();
+                    int num = java.lang.Integer.parseInt(input);
+                    
+                    if(!logged_in) { 
+                        if(num - 1 <= account_list.length) {
+                            logged_in = true;
+
+                            active_account = account_list[num];
+                            displayMenu("");
+                        } else {
+                            gui.output("Ugyldig kontonummer");
+                        }
+                    } else {
+                        doAction(num);
+                    }
+                } catch(Exception ex) {
+                    gui.output("Vennligst skriv inn et tall");
                 }
-            }*/
+                
+                gui.setInput("");
+            }
+        };
+        
+        withdraw_button_listener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String input = gui.getInput();
+                    int amount = java.lang.Integer.parseInt(input);
+                    
+                    if(active_account.hasMoney(amount)) {
+                        active_account.withdrawMoney(amount);
+
+                        displayMenu("Ny balanse er " + active_account.getBalance());
+                    } else {
+                        displayMenu("Du har ikke nok penger på konto");
+                    }
+                    
+                    gui.removeButtonListener(withdraw_button_listener);
+                    gui.setButtonListener(default_button_listener);
+                } catch(Exception ex) {
+                    gui.output("Vennligst skriv inn et tall");
+                }
+                
+                gui.setInput("");
+            }
+        };
+        
+        deposit_button_listener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String input = gui.getInput();
+                    int amount = java.lang.Integer.parseInt(input);
+                    
+                    if(amount > 0) {
+                        active_account.depositMoney(amount);
+                        displayMenu("Ny saldo er " + active_account.getBalance());
+                    } else {
+                        displayMenu("Kan ikke sette inn " + amount +" kroner");
+                    }
+                    
+                    gui.removeButtonListener(deposit_button_listener);
+                    gui.setButtonListener(default_button_listener);
+                } catch(Exception ex) {
+                    gui.output("Vennligst skriv inn et tall");
+                }
+                
+                gui.setInput("");
+            }
+        };
+        
+        new_account_button_listener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String name = gui.getInput();
+                    
+                    
+                    Konto k = new Konto();
+                    k.setName(name);
+
+                    Konto[] new_accounts = new Konto[account_list.length + 1];
+                    new_accounts[new_accounts.length - 1] = k;
+
+                    System.arraycopy(account_list, 0, new_accounts, 0, account_list.length);
+
+                    account_list = new_accounts;
+
+                    displayMenu("Ditt nye kontonummer er " + (account_list.length - 1));
+                    
+                    gui.removeButtonListener(new_account_button_listener);
+                    gui.setButtonListener(default_button_listener);
+                } catch(Exception ex) {
+                    
+                }
+                
+                gui.setInput("");
+            }
+        };
+        
+        gui.setButtonListener(default_button_listener);
+        
     }
     
+    /**
+     * Displays the menu followed by a custom text message
+     * @param add 
+     */
+    public void displayMenu(String add) {
+        String output_text = "Velkommen " + active_account.getOwner() + "\n"
+                + "Velg Funksjon\n"
+                + "1. Se saldo\n"
+                + "2. Ta ut penger\n"
+                + "3. Sett inn penger\n"
+                + "4. Legg til konto\n"
+                + "0. Logg ut\n\n";
+
+        gui.output(output_text + add);
+    }
+    
+    /**
+     * Perform an action based on the input given
+     * @param n 
+     */
     public void doAction(int n) {
         switch(n) {
             case 1:
                 // Se saldo
-                System.out.println("Din saldo er " + active_account.getBalance());
+                
+                displayMenu("Din saldo er " + active_account.getBalance());
                 break;
                 
             case 2:
@@ -91,10 +180,12 @@ public class minibank {
                 addAccount();
                 break;
                 
-            case 5:
+            case 0:
             default:
-                System.out.println("Velkommen tilbake");
-                running = false;
+                welcome();
+                
+                //gui.exit();
+                logged_in = false;
                 break;
         }
         
@@ -103,39 +194,36 @@ public class minibank {
         }
     }
     
+    /**
+     * Sets the withdraw button listener
+     */
     public void withdraw() {
-        System.out.println("Angi uttakssum: ");
-        int amount = in.nextInt();
-        
-        active_account.withdrawMoney(amount);
-        System.out.println("Ny balanse er " + active_account.getBalance());
+        gui.output("Angi uttakssum: ");
+        gui.removeButtonListener(default_button_listener);
+        gui.setButtonListener(withdraw_button_listener);
     }
     
+    /**
+     * Sets the deposit button listener
+     */
     public void deposit() {
-        System.out.println("Angi sum å sette inn:");
-        int amount = in.nextInt();
-        
-        active_account.depositMoney(amount);
-        System.out.println("Ny balanse er " + active_account.getBalance());
+        gui.output("Angi sum å sette inn:");
+        gui.removeButtonListener(default_button_listener);
+        gui.setButtonListener(deposit_button_listener);
     }
     
+    /**
+     * Sets the add account button listener
+     */
     public void addAccount() {
-        System.out.println("Skriv inn navn på kontoeier:");
-        String name = in.next();
-        
-        Konto k = new Konto();
-        k.setName(name);
-        
-        Konto[] new_accounts = new Konto[account_list.length + 1];
-        new_accounts[new_accounts.length - 1] = k;
-        
-        System.arraycopy(account_list, 0, new_accounts, 0, account_list.length);
-        
-        account_list = new_accounts;
-        
-        System.out.println("Ditt nye kontonummer er " + (account_list.length - 1));
+        gui.output("Skriv inn navn på kontoeier:");
+        gui.removeButtonListener(default_button_listener);
+        gui.setButtonListener(new_account_button_listener);
     }
     
+    /**
+     * Display the list of accounts at the output field
+     */
     public void accountInfo() {
         System.out.println("Velg din konto");
         printAccounts();
@@ -144,12 +232,23 @@ public class minibank {
         acc.writeInfo();
     }
     
-    public void printAccounts() {
+    /**
+     * Returns a text-formatted string representing the list of accounts
+     * @return 
+     */
+    public String printAccounts() {
+        String output_text = "";
         for(int i=0; i<account_list.length; i++) {
-            //accounts[i].writeInfo();
-            //System.out.println("---------------------------------");
-            System.out.println(i + ": "+account_list[i].getOwner());
+            output_text += i + ": "+account_list[i].getOwner() +"\n";
         }
-        
+        return output_text;
+    }
+    
+    /**
+     * Outputs the welcome-text/first screen of the minibank
+     */
+    private void welcome() {
+        String account_list = printAccounts();
+        gui.output("Velkommen til 1337 bank, vennligt velg ditt kontonummer\n\n" + account_list);
     }
 }
