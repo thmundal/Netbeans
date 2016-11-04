@@ -58,4 +58,22 @@ public class Eksamensoppgave2015 { // <-- DETTE ER EN KLASSE
         }
     }
     
+    /**
+     * Metode som utfører oppgave 1 a
+     */
+    public static void HelloWorld() {
+        System.out.println("Hello World");
+    }
+    
+    /**
+     * Oppgave 1 b
+     */
+    public static void strinParts() {
+        System.out.print("jeg har eksamen");
+        System.out.print(" i java-\n");
+        System.out.print("programmering");
+        System.out.print(" og");
+        System.out.print(" elsker det!");
+    }
+    
 }
