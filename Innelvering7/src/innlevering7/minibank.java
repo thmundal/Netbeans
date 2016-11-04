@@ -7,7 +7,6 @@ package innlevering7;
 
 import java.util.Scanner;
 import innlevering6.Konto;
-import javax.swing.JPanel;
 /**
  *
  * @author 888651
@@ -18,16 +17,25 @@ public class minibank {
     private int account_number;
     private Konto active_account;
     private boolean running = false;
+    private BankGUI gui;
     
-    public minibank(Konto[] acc_list) {
+    public minibank(Konto[] acc_list, BankGUI g) {
         account_list = acc_list;
         in = new Scanner(System.in);
+        gui = g;
         
         boolean valid = false;
         
-        System.out.println("Velkommen til 1337 Bank");
-        System.out.println("Vennligst skriv inn ditt kontonummer");
+        String welcome_text = "Velkommen til 1337 bank\n" +
+                "Vennligst skriv inn ditt kontonummer";
         
+        gui.output().setText(welcome_text);
+        
+        /*System.out.println("Velkommen til 1337 Bank");
+        System.out.println("Vennligst skriv inn ditt kontonummer");
+        */
+        
+        /*
         while(!valid) {
             try {
                 account_number = in.nextInt();
@@ -42,16 +50,24 @@ public class minibank {
                 in.next();
                 System.out.println("");
             }
-        }
+        }*/
         
         running = true;
         //displayMenu(account_list[account_number]);
     }
     
-    private void displayMenu(Konto ac, JPanel output) {
+    private void displayMenu(Konto ac) {
             active_account = ac;
             
-            //output.
+            String text = "Velkommen " + active_account.getOwner() +"\n"
+                    + "Velg funksjon\n"
+                    + "1. Se saldo\n"
+                    + "2. Ta ut penger\n"
+                    + "3. Sett inn penger"
+                    + "4. Legg til konto"
+                    + "5. Avslutt";
+            
+            gui.output().setText(text);
             
             /*while(running) {
                 System.out.println("Velkommen " + active_account.getOwner());

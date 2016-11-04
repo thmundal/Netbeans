@@ -32,7 +32,7 @@ public class Innlevering7 {
         /*in = new Scanner(System.in);
         int menunum = 1;
         
-        do{
+        do{  
             try {
                 
             } catch(Exception e) {
@@ -41,8 +41,8 @@ public class Innlevering7 {
             
         } while(menunum > 0);*/
         
-        minibank bank = new minibank(accounts);
         BankGUI gui = new BankGUI();
+        minibank bank = new minibank(accounts, gui);
         
     }
 }
