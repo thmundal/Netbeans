@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,11 +27,19 @@ public class Game {
     public float deltaTime;
     float frameRate;
     double timePerFrame;
+    public int height;
+    public int width;
+    
+    public static Random seed = new Random();
+    public static Random random = new Random(seed.nextLong());
     
     private InputListener input;
-    public Game() {
+    public Game(int w, int h) {
         frameRate = 60;
         timePerFrame = 1f / frameRate;
+        
+        height = h;
+        width = w;
         
         state = true;
         JFrame window = new JFrame("Test");
@@ -52,7 +61,7 @@ public class Game {
         frame.add(panel);
         window.add(frame);
         
-        window.setSize(500,500);
+        window.setSize(width, height);
         window.setVisible(true);
         
         panel.setFocusable(true);
