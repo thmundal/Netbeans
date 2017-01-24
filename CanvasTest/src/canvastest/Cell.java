@@ -10,19 +10,31 @@ import java.awt.Graphics;
 
 /**
  *
- * @author Thomas
  */
 public class Cell {
-    public Color color;
-    
-    public Vector2 position;
+    private Transform transform;
     public Vector2 size;
+    public Color color;
+    public boolean wall;
+    
+    public Cell(Vector2 s, Vector2 p, Color c) {
+        size = s;
+        color = c;
+        transform = new Transform();
+        transform.position = p;
+        wall = Game.random.nextBoolean();
+    }
     
     public Cell() {
         color = Color.white;
     }
     
     public void Draw(Graphics g) {
-        g.drawRect((int) position.x * (int) size.x, (int) position.y * (int) size.y, (int) size.x, (int) size.y);
+        if(wall) {
+            g.setColor(Color.black);
+        } else {
+            g.setColor(color);
+        }
+        g.fillRect((int) transform.position.x, (int) transform.position.y, (int) size.x, (int) size.y);
     }
 }

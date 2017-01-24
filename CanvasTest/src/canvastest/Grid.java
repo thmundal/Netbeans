@@ -5,66 +5,82 @@
  */
 package canvastest;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 /**
  *
- * @author Thomas
+ * @author thmun
  */
 public class Grid {
-    private int height;
-    private int width;
-    
-    private int cell_height;
-    private int cell_width;
-    
+    private Transform transform;
+    private Vector2 size;
+    private Vector2 cell_size;
     private Cell[][] grid_data;
     
     public Grid() {
-        height = 100;
-        width = 100;
-        cell_height = 10;
-        cell_width = 10;
-    }
-    
-    public Grid(int h, int w, int ch, int cw) {
-        height = h;
-        width = w;
-        cell_height = ch;
-        cell_width = cw;
         
-        // Probably move this
-        CreateGridData();
     }
     
+    public Grid(int width, int height, int cell_width, int cell_height) {
+        size = new Vector2(width, height);
+        cell_size = new Vector2(cell_width, cell_height);
+        
+        MakeGridData();
+    }
+    
+    public void MakeGridData() {
+        grid_data = new Cell[(int) (size.x / cell_size.x)][(int) (size.y / cell_size.y)];
+        
+        for(int x=0; x < (int) (size.x / cell_size.x); x++) {
+            for(int y=0; y < (int) (size.y / cell_size.y); y++) {
+                grid_data[x][y] = new Cell(new Vector2((int) cell_size.x, (int) cell_size.y), new Vector2(x * (int) cell_size.x, y * (int) cell_size.y), Color.white);
+            }
+        }
+    }
+
     public void Draw(Graphics g) {
-        for(int x=0; x<width/cell_width; x++) {
-            for(int y=0; y<height/cell_height; y++) {
-                Cell c = grid_data[x][y];
-                c.position.x = x;
-                c.position.y = y;
-                c.size.x = cell_width;
-                c.size.y = cell_height;
-                c.Draw(g);
-                //g.drawRect(x * cell_width, y * cell_height, cell_width, cell_height);
+        for(int x=0; x < (int) (size.x / cell_size.x); x++) {
+            for(int y=0; y < (int) (size.y / cell_size.y); y++) {
+                grid_data[x][y].Draw(g);
             }
         }
     }
     
-    public int num_cells_x() {
-        return width / cell_width;
-    }
-    
-    public int num_cells_y() {
-        return height / cell_height;
-    }
-    
-    public Cell[][] CreateGridData() {
-        grid_data = new Cell[num_cells_x()][num_cells_y()];
-        return grid_data;
-    }
-    
     public Cell CellAt(int x, int y) {
+        if(x < 0) {
+            x = 0;
+        }
+        if(y < 0) {
+            y = 0;
+        }
+        if(x > grid_data.length - 1) {
+            x = grid_data.length - 1;
+        }
+        
+        if(y > grid_data[0].length - 1) {
+            y = grid_data[0].length - 1;
+        }
         return grid_data[x][y];
+    }
+    
+    public Cell RandomCell() {
+        Random rand = Game.random;
+        return grid_data[rand.nextInt(grid_data.length - 1)][rand.nextInt(grid_data[0].length - 1)];
+    }
+    
+    public CellSet Neighbours(int x, int y) {
+        Cell[] n = new Cell[9];
+        
+        int count = 0;
+        for(int _y = y - 1; _y <= y+1; _y++) {
+            for(int _x = x - 1; _x <= x+1; _x++) {
+                n[count] = CellAt(_x, _y);
+                count++;
+            }
+        }
+        
+        return new CellSet(n);
     }
 }

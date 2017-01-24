@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package canvastest;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,12 +21,17 @@ public class CanvasTest {
     public static Vector2 pos = new Vector2(1f, 1f);
     public static Vector2 speed = new Vector2(0f, 0f);
     public static Sprite dude;
+    public static Grid grid;
     
     public static void main(String[] args) {
-        final Game game = new Game();
+        final Game game = new Game(800, 600);
         final float moveSpeed = 500.0f;
         
         final Vector2 gravity = new Vector2(0, 100);
+        grid = new Grid(game.height, game.width, 32, 32);
+        
+        grid.CellAt(0, 0).color = Color.black;
+        grid.RandomCell().color = Color.green;
         
         game.Update(new UpdateCallback() {
             public void run(Game g, float deltaTime) {
@@ -54,7 +60,10 @@ public class CanvasTest {
         
         game.Draw(new DrawCallback() {
             public void run(Graphics g, float deltaTime) {
-                g.clearRect(0, 0, 500, 500);
+                g.clearRect(0, 0, game.width, game.height);
+                grid.Draw(g);
+                
+                g.setColor(Color.red);
                 g.drawOval(pos.intX(), pos.intY(), 60, 60); //FOR CIRCLE
             }
         });
